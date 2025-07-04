@@ -12,18 +12,18 @@ wss.on("connection", (ws) => {
   console.log("🔗 Client connected");
 
   ws.on("message", (message) => {
-    console.log("📩 Received:", message.toString());
+    console.log("📩 Message received:", message.toString());
 
     try {
       const data = JSON.parse(message);
-      // Broadcast to other clients
+      // Broadcast to all clients except sender
       wss.clients.forEach((client) => {
         if (client !== ws && client.readyState === WebSocket.OPEN) {
           client.send(JSON.stringify(data));
         }
       });
-    } catch (e) {
-      console.error("Invalid message format", e);
+    } catch (err) {
+      console.error("Invalid message format", err);
     }
   });
 
